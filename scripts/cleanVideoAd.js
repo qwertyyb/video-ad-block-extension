@@ -120,7 +120,7 @@ var VideoAdCleaner = {
 			scope: "regular"
 		})
 		this._isProxying = true
-		setTimeout(this.clearProxy, 3000)
+		setTimeout(this.clearProxy.bind(this), 3000)
 	},
 	clearProxy () {
 		if (!this._isProxying) {
@@ -132,7 +132,7 @@ var VideoAdCleaner = {
 		   	if (c.levelOfControl == "controlled_by_this_extension") {
 		    	chrome.proxy.settings.clear({
 		        	scope: "regular"
-		    	});
+		    	})
 		    }
 		});
 		this._isProxying = false
