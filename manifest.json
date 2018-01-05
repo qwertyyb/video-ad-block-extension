@@ -2,7 +2,7 @@
 	"name": "视频广告屏蔽",
 	"version": "20171201",
 	"manifest_version": 2,
-	"description": "屏蔽视频网站的广告",
+	"description": "屏蔽国内各大视频网站的广告",
 	"icons": {
 		"16": "icons/icon16.png",
 		"32": "icons/icon32.png",

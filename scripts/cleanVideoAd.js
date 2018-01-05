@@ -1,5 +1,7 @@
 var VideoAdCleaner = {
-	version: '20171201',
+	version: '20180105',
+
+	// these urls will be cancelled
 	blockList: [
 		"http://*/*/*/*/letv-gug/*/ver_*-avc-*-aac-*.letv*",
 		"http://*.letvimg.com/lc*_gugwl/*/*/*/*/*",
@@ -18,30 +20,32 @@ var VideoAdCleaner = {
 		"http://*/vlive.qqvideo.tc.qq.com/*.mp4?vkey=*",
 		"http://*/variety.tc.qq.com/*.mp4?vkey=*"
 	],
+
+	// these urls will be redirected
 	redirectList: [
 		{
 	        reg: /^http:\/\/static\.youku\.com(\/v[\d\.]*)?\/v\/swf\/loaders?[^\.]*\.swf/,
-	        replace: "http://adclear.b0.upaiyun.com/pc_v4/spz/player3.swf"
+	        replace: "http://7xv7aw.com1.z0.glb.clouddn.com/adblock/player/youku.swf"
 	    },
 		 
 	    {
 	        reg: /^http:\/\/static\.youku\.com(\/v[\d\.]*)?\/v\/swf\/(q?player[^\.]*|\w{13})\.swf/,
-	        replace: "http://adclear.b0.upaiyun.com/pc_v4/spz/player3.swf"
+	        replace: "http://7xv7aw.com1.z0.glb.clouddn.com/adblock/player/youku.swf"
 	    },  
 		 
 	    {
 	        reg: "static.youku.com/.*/v/swf/upsplayer/player_yknpsv.swf",
-	        replace: "http://adclear.b0.upaiyun.com/pc_v4/spz/player3.swf"
+	        replace: "http://7xv7aw.com1.z0.glb.clouddn.com/adblock/player/youku.swf"
 	    },
 		 
 	    {
 	        reg: "static.youku.com/.*/v/swf/upsplayer/loader.swf$",
-	        replace: "http://adclear.b0.upaiyun.com/pc_v4/spz/player3.swf"
+	        replace: "http://7xv7aw.com1.z0.glb.clouddn.com/adblock/player/youku.swf"
 	    },	 
 		 
 		{
 	        reg: "static.youku.com/.*/v/swf/upsplayer/player_yk.swf",
-	        replace: "http://adclear.b0.upaiyun.com/pc_v4/spz/player3.swf"
+	        replace: "http://7xv7aw.com1.z0.glb.clouddn.com/adblock/player/youku.swf"
 	    },	
 		 
 	    {
@@ -58,11 +62,11 @@ var VideoAdCleaner = {
 	      //Sohu
 	    {
 	        reg: "http://220.181.90.161/wp8player/Main.swf",
-	        replace: "http://adclear.b0.upaiyun.com/pc_v4/plugin/data/sohu160908.swf"
+	        replace: "http://7xv7aw.com1.z0.glb.clouddn.com/adblock/player/sohu.swf"
 	    },
 	    {
 	        reg: "[http|https]://tv.sohu.com/upload/swf/.*/Main.swf",
-	        replace: "http://adclear.b0.upaiyun.com/pc_v4/plugin/data/sohu160908.swf"
+	        replace: "http://7xv7aw.com1.z0.glb.clouddn.com/adblock/player/sohu.swf"
 	    },
 	      //qq
 	    {
@@ -72,20 +76,20 @@ var VideoAdCleaner = {
 	      //k6	  
 	    {
 	        reg: "player.ku6cdn.com/default/common/player/.*/player.swf",
-	        replace: "http://adclear.b0.upaiyun.com/pc_v4/plugin/data/ku6-player.swf?adss=0"
+	        replace: "http://7xv7aw.com1.z0.glb.clouddn.com/adblock/player/ku6.swf?adss=0"
 	    },
 	      //17173
 	    {
 	        reg: "http://f.v.17173cdn.com/.*flash/PreloaderFileFirstpage.swf.*",
-	        replace: "http://adclear.b0.upaiyun.com/pc_v4/plugin/data/adsafeplugin001/17173.swf"
+	        replace: "http://7xv7aw.com1.z0.glb.clouddn.com/adblock/player/17173.swf"
 	    },
 	    {
 	        reg: "http://f.v.17173cdn.com/.*flash/Player_file.swf.*",
-	        replace: "http://adclear.b0.upaiyun.com/pc_v4/plugin/data/adsafeplugin001/17173.swf"
+	        replace: "http://7xv7aw.com1.z0.glb.clouddn.com/adblock/player/17173.swf"
 	    },
 	    {
 	        reg: "http://f.v.17173cdn.com/.*flash/PreloaderFile.swf.*",
-	        replace: "http://adclear.b0.upaiyun.com/pc_v4/plugin/data/adsafeplugin001/17173.swf"
+	        replace: "http://7xv7aw.com1.z0.glb.clouddn.com/adblock/player/17173.swf"
 	    },
 	    {
 	        reg: ".*adsafeplugin001/SM.swf",
@@ -98,7 +102,7 @@ var VideoAdCleaner = {
 		  
 	    {
 	        reg: "http://www.iqiyi.com/common/flashplayer/.*/.*df.swf",
-	        replace: "http://adclear.b0.upaiyun.com/pc_v4/spz/iqiyi.swf"
+	        replace: "http://7xv7aw.com1.z0.glb.clouddn.com/adblock/player/iqiyi.swf"
 	    },	
 		  
 		{
@@ -106,6 +110,8 @@ var VideoAdCleaner = {
 	        replace: "http://t7z.cupid.iqiyi.com/"
 	    },	
 	],
+
+	// proxy request about crossdomain.xml 
 	setProxy () {
 		if (this._isProxying) {
 			return
@@ -114,7 +120,7 @@ var VideoAdCleaner = {
 			value: {
 				mode: "pac_script",
 				pacScript: {
-					data: "function FindProxyForURL(url, host) {\n  var regexpr = /http:.*\\/crossdomain\\.xml/;\n   if(regexpr.test(url)){\n        return 'PROXY play.g3proxy.lecloud.com:80';\n   }\n return 'DIRECT';\n}"
+					data: "function FindProxyForURL(url, host) {\n  var reg = /http:.*\\/crossdomain\\.xml/;\n   if(reg.test(url)){\n        return 'PROXY play.g3proxy.lecloud.com:80';\n   }\n return 'DIRECT';\n}"
 				}
 			},
 			scope: "regular"
@@ -122,6 +128,8 @@ var VideoAdCleaner = {
 		this._isProxying = true
 		setTimeout(this.clearProxy.bind(this), 3000)
 	},
+
+	// clear proxy
 	clearProxy () {
 		if (!this._isProxying) {
 			return
@@ -137,19 +145,19 @@ var VideoAdCleaner = {
 		});
 		this._isProxying = false
 	},
-	init () {
-		var _this = this
+	start () {
 		// cancel these request
 		chrome.webRequest.onBeforeRequest.addListener(
-			_this._cancelRequst.bind(this), {urls: this.blockList}, ['blocking'])
+			this._cancelRequst.bind(this), {urls: this.blockList}, ['blocking'])
 		
 		// proxy and redirect request
 		chrome.webRequest.onBeforeRequest.addListener(
-			_this._redirectRequest.bind(this), {urls: ['http://*/*', 'https://*/*']}, ['blocking'])
+			this._redirectRequest.bind(this), {urls: ['http://*/*', 'https://*/*']}, ['blocking'])
 	},
 	stop () {
 		chrome.webRequest.onBeforeRequest.removeListener(_this._cancelRequst)
 		chrome.webRequest.onBeforeRequest.removeListener(_this._redirectRequest)
+		this.clearProxy()
 	},
 	_cancelRequst (details) {
 		return {cancel: true}
@@ -175,4 +183,4 @@ var VideoAdCleaner = {
 }
 
 console.log(VideoAdCleaner.version)
-VideoAdCleaner.init()
+VideoAdCleaner.start()
