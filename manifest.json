@@ -1,6 +1,6 @@
 {
 	"name": "视频广告屏蔽",
-	"version": "20171201",
+	"version": "1.0",
 	"manifest_version": 2,
 	"description": "屏蔽国内各大视频网站的广告",
 	"icons": {
@@ -19,5 +19,6 @@
 		"proxy",
 		"webRequest",
 		"webRequestBlocking"
-	]
+	],
+	"update_url": "http://7xv7aw.com1.z0.glb.clouddn.com/adblock/version.xml"
 }
