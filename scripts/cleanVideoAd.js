@@ -1,3 +1,10 @@
+/*
+ * @Author: qwertyyb 
+ * @Date: 2018-01-10 16:25:56 
+ * @Last Modified by: qwertyyb
+ * @Last Modified time: 2018-01-10 18:15:52
+ */
+
 // ,--^----------,--------,-----,-------^--,  
 //   | |||||||||   `--------'     |          O  
 //   `+---------------------------^----------|  
@@ -12,7 +19,8 @@
 
 var VideoAdCleaner = {
 	version: '20180105',
-
+	status: 'stopped',
+	blockCount: 0,
 	// these urls will be cancelled
 	blockList: [
 		"http://*/*/*/*/letv-gug/*/ver_*-avc-*-aac-*.letv*",
@@ -165,18 +173,46 @@ var VideoAdCleaner = {
 		// proxy and redirect request
 		chrome.webRequest.onBeforeRequest.addListener(
 			this._redirectRequest.bind(this), {urls: ['http://*/*', 'https://*/*']}, ['blocking'])
+
+		this.updateStatus('running')
 	},
 	stop () {
 		chrome.webRequest.onBeforeRequest.removeListener(_this._cancelRequst)
 		chrome.webRequest.onBeforeRequest.removeListener(_this._redirectRequest)
 		this.clearProxy()
+
+		this.updateStatus('stopped')
+	},
+	updateStatus (newValue) {
+		if (this.status === newValue) {
+			return
+		}
+		this.status = newValue
+		var icon = '../icons/on.png'
+		switch (newValue) {
+			case 'running': icon = '../icons/on.png'
+			break
+			case 'stopped': icon = '../icons/off.png'
+			break
+		}
+		chrome.browserAction.setIcon({
+			path: icon
+		})
+	},
+	updateBlockCountStatus (count) {
+		this.blockCount = count
+		chrome.browserAction.setBadgeText({
+			text: count.toString()
+		})
 	},
 	_cancelRequst (details) {
+		this.updateBlockCountStatus(this.blockCount+1)
 		return {cancel: true}
 	},
 	_redirectRequest (details) {
 		if (/^http:\/\/player\.letvcdn\.com\/.*p\/.*\/newplayer\/LetvPlayer\.swf.*baidushort.*/i.test(details.url)) {
-	    	return
+			this.updateBlockCountStatus(this.blockCount+1)
+			return
 		}
 	    if (details.url.toLowerCase().indexOf("crossdomain.xml") != -1) {
 	    	this.setProxy()
@@ -185,7 +221,8 @@ var VideoAdCleaner = {
 	    for (var i = 0, len=this.redirectList.length; i < len; i++) {
 	  		var item = this.redirectList[i]
 	  		if (details.url.match(item.reg)) {
-		    	var arr = details.url.split('?')
+				var arr = details.url.split('?')
+				this.updateBlockCountStatus(this.blockCount+1)
 		    	return {
 		      		redirectUrl: item.replace + (arr.length > 1 ? '' : '?' + arr[1])
 		    	}
@@ -193,6 +230,9 @@ var VideoAdCleaner = {
 	  	}
 	}
 }
-
-console.log(VideoAdCleaner.version)
+window.onerror = function (err) {
+	chrome.browserAction.setIcon({
+		path: 'icons/err.png'
+	})
+}
 VideoAdCleaner.start()
