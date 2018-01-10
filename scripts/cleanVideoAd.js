@@ -2,7 +2,7 @@
  * @Author: qwertyyb 
  * @Date: 2018-01-10 16:25:56 
  * @Last Modified by: qwertyyb
- * @Last Modified time: 2018-01-10 22:04:30
+ * @Last Modified time: 2018-01-10 22:51:19
  */
 
 // ,--^----------,--------,-----,-------^--,  
@@ -16,6 +16,16 @@
 //   / XXXXXX /  
 //  (________(  
 //   `------'   
+
+/**
+ * 扩展腾讯移动分析，添加触发事件方法
+ * 
+ * @param {string} eventId (事件ID)
+ * @param {object} params (参数)
+ */
+MtaH5.emit = function(eventId, params) {
+    MtaH5.clickStat(eventId, params)
+}
 
 var VideoAdCleaner = {
 	version: '20180105',
@@ -183,8 +193,8 @@ var VideoAdCleaner = {
 
 		this.updateStatus('stopped')
 	},
-	updateStatus (newValue) {
-		if (this.status === newValue) {
+	updateStatus (newVlue) {
+		if (this.status === newVlue) {
 			return
 		}
 		this.status = newValue
@@ -242,9 +252,23 @@ var VideoAdCleaner = {
 		}
 	}
 }
-window.onerror = function (err) {
+/**
+ * @param  {string} errMsg
+ * @param  {string} errUrl
+ * @param  {number} errLineNo
+ * @param  {number} errColNo
+ * @param  {Error} err
+ */
+window.onerror = function (errMsg, errUrl, errLineNo, errColNo, err) {
 	chrome.browserAction.setIcon({
 		path: 'icons/err.png'
+	})
+	MtaH5.emit('err', {
+		row: errLineNo,
+		column: errColNo,
+		msg: errMsg,
+		stack: err.stack,
+		file: errUrl
 	})
 }
 VideoAdCleaner.start()
