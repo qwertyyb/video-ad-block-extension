@@ -2,7 +2,7 @@
  * @Author: qwertyyb 
  * @Date: 2018-01-10 16:25:56 
  * @Last Modified by: qwertyyb
- * @Last Modified time: 2018-01-10 21:22:36
+ * @Last Modified time: 2018-01-10 22:04:30
  */
 
 // ,--^----------,--------,-----,-------^--,  
@@ -207,14 +207,14 @@ var VideoAdCleaner = {
 	},
 	_cancelRequst (details) {
 		this.updateBlockCountStatus(this.blockCount+1)
-		MtaH5.clickStat('ads', {url: details.url})
+		this.pushToMtaH5(details.url)
 		return {cancel: true}
 	},
 	_redirectRequest (details) {
-		if (/^http:\/\/player\.letvcdn\.com\/.*p\/.*\/newplayer\/LetvPlayer\.swf.*baidushort.*/i.test(details.url)) {
-			this.updateBlockCountStatus(this.blockCount+1)
-			return
-		}
+		// if (/^http:\/\/player\.letvcdn\.com\/.*p\/.*\/newplayer\/LetvPlayer\.swf.*baidushort.*/i.test(details.url)) {
+		// 	this.updateBlockCountStatus(this.blockCount+1)
+		// 	return
+		// }
 	    if (details.url.toLowerCase().indexOf("crossdomain.xml") != -1) {
 	    	this.setProxy()
 	    	return
@@ -224,15 +224,22 @@ var VideoAdCleaner = {
 	  		if (details.url.match(item.reg)) {
 				var arr = details.url.split('?')
 				this.updateBlockCountStatus(this.blockCount+1)
-				MtaH5.clickStat('ads', {
-					match: item.reg,
-					url: details.url
-				})
+				this.pushToMtaH5(details.url, item.reg)
 		    	return {
 		      		redirectUrl: item.replace + (arr.length > 1 ? '' : '?' + arr[1])
 		    	}
 	  		}
 	  	}
+	},
+	pushToMtaH5 (url, match) {
+		if (match) {
+			MtaH5.clickStat('ads', {
+				match: match,
+				url: url
+			})
+		} else {
+			MtaH5.clickStat('ads', {url: url})
+		}
 	}
 }
 window.onerror = function (err) {
@@ -241,15 +248,3 @@ window.onerror = function (err) {
 	})
 }
 VideoAdCleaner.start()
-
-// // 移动分析
-// var _mtac = {}
-// (function() {
-// 	var mta = document.createElement("script")
-// 	mta.src = "scripts/lib/stats.js"
-// 	mta.setAttribute("name", "MTAH5")
-// 	mta.setAttribute("sid", "500574793")
-
-// 	var s = document.getElementsByTagName("script")[0]
-// 	s.parentNode.insertBefore(mta, s)
-// })()
