@@ -2,7 +2,7 @@
  * @Author: qwertyyb 
  * @Date: 2018-01-10 16:25:56 
  * @Last Modified by: qwertyyb
- * @Last Modified time: 2018-01-10 22:51:19
+ * @Last Modified time: 2018-01-11 00:13:57
  */
 
 // ,--^----------,--------,-----,-------^--,  
@@ -142,7 +142,7 @@ var VideoAdCleaner = {
 	],
 
 	// proxy request about crossdomain.xml 
-	setProxy () {
+	setProxy: function () {
 		if (this._isProxying) {
 			return
 		}
@@ -160,7 +160,7 @@ var VideoAdCleaner = {
 	},
 
 	// clear proxy
-	clearProxy () {
+	clearProxy: function() {
 		if (!this._isProxying) {
 			return
 		}
@@ -175,7 +175,7 @@ var VideoAdCleaner = {
 		});
 		this._isProxying = false
 	},
-	start () {
+	start: function() {
 		// cancel these request
 		chrome.webRequest.onBeforeRequest.addListener(
 			this._cancelRequst.bind(this), {urls: this.blockList}, ['blocking'])
@@ -186,15 +186,15 @@ var VideoAdCleaner = {
 
 		this.updateStatus('running')
 	},
-	stop () {
+	stop: function() {
 		chrome.webRequest.onBeforeRequest.removeListener(_this._cancelRequst)
 		chrome.webRequest.onBeforeRequest.removeListener(_this._redirectRequest)
 		this.clearProxy()
 
 		this.updateStatus('stopped')
 	},
-	updateStatus (newVlue) {
-		if (this.status === newVlue) {
+	updateStatus: function(newValue) {
+		if (this.status === newValue) {
 			return
 		}
 		this.status = newValue
@@ -209,18 +209,18 @@ var VideoAdCleaner = {
 			path: icon
 		})
 	},
-	updateBlockCountStatus (count) {
+	updateBlockCountStatus: function(count) {
 		this.blockCount = count
 		chrome.browserAction.setBadgeText({
 			text: count.toString()
 		})
 	},
-	_cancelRequst (details) {
+	_cancelRequst: function(details) {
 		this.updateBlockCountStatus(this.blockCount+1)
 		this.pushToMtaH5(details.url)
 		return {cancel: true}
 	},
-	_redirectRequest (details) {
+	_redirectRequest: function(details) {
 		// if (/^http:\/\/player\.letvcdn\.com\/.*p\/.*\/newplayer\/LetvPlayer\.swf.*baidushort.*/i.test(details.url)) {
 		// 	this.updateBlockCountStatus(this.blockCount+1)
 		// 	return
@@ -241,7 +241,7 @@ var VideoAdCleaner = {
 	  		}
 	  	}
 	},
-	pushToMtaH5 (url, match) {
+	pushToMtaH5: function(url, match) {
 		if (match) {
 			MtaH5.clickStat('ads', {
 				match: match,
