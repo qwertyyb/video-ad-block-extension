@@ -2,7 +2,7 @@
  * @Author: qwertyyb 
  * @Date: 2018-01-10 16:25:56 
  * @Last Modified by: qwertyyb
- * @Last Modified time: 2018-01-10 21:00:00
+ * @Last Modified time: 2018-01-10 21:22:36
  */
 
 // ,--^----------,--------,-----,-------^--,  
@@ -207,6 +207,7 @@ var VideoAdCleaner = {
 	},
 	_cancelRequst (details) {
 		this.updateBlockCountStatus(this.blockCount+1)
+		MtaH5.clickStat('ads', {url: details.url})
 		return {cancel: true}
 	},
 	_redirectRequest (details) {
@@ -223,6 +224,10 @@ var VideoAdCleaner = {
 	  		if (details.url.match(item.reg)) {
 				var arr = details.url.split('?')
 				this.updateBlockCountStatus(this.blockCount+1)
+				MtaH5.clickStat('ads', {
+					match: item.reg,
+					url: details.url
+				})
 		    	return {
 		      		redirectUrl: item.replace + (arr.length > 1 ? '' : '?' + arr[1])
 		    	}
