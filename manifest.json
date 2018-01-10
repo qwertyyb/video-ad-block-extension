@@ -16,7 +16,7 @@
 		"128": "icons/icon128.png"
 	},
 	"background": {
-		"scripts": ["scripts/cleanVideoAd.js"]
+		"page": "background.html"
 	},
 	"permissions": [
 		"http://*/*",

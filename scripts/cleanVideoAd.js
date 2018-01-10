@@ -2,7 +2,7 @@
  * @Author: qwertyyb 
  * @Date: 2018-01-10 16:25:56 
  * @Last Modified by: qwertyyb
- * @Last Modified time: 2018-01-10 18:15:52
+ * @Last Modified time: 2018-01-10 21:00:00
  */
 
 // ,--^----------,--------,-----,-------^--,  
@@ -236,3 +236,15 @@ window.onerror = function (err) {
 	})
 }
 VideoAdCleaner.start()
+
+// // 移动分析
+// var _mtac = {}
+// (function() {
+// 	var mta = document.createElement("script")
+// 	mta.src = "scripts/lib/stats.js"
+// 	mta.setAttribute("name", "MTAH5")
+// 	mta.setAttribute("sid", "500574793")
+
+// 	var s = document.getElementsByTagName("script")[0]
+// 	s.parentNode.insertBefore(mta, s)
+// })()
