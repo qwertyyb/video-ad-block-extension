@@ -41,13 +41,35 @@ function uploadFile(localFile, key, token) {
         }
     
         if (respInfo.statusCode == 200) {
-            console.log(localFile + " 上传成功:", respBody);
+            console.log(respBody.key + " 上传成功");
+            if(respBody.key.split('.')[1].toLowerCase() === 'xml') {
+                refreshVersionXml()
+            }
         } else {
             console.log(respInfo.statusCode);
             console.log(respBody);
         }
     });
 }
+
+function refreshVersionXml (){
+//URL 列表
+var urlsToRefresh = [
+    'http://7xv7aw.com1.z0.glb.clouddn.com/adblock/version.xml'
+  ];
+var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
+var cdnManager = new qiniu.cdn.CdnManager(mac);
+//刷新链接
+cdnManager.refreshUrls(urlsToRefresh, function(err, respBody, respInfo) {
+    if (err) {
+        throw err;
+    }
+    if (respInfo.statusCode == 200) {
+        console.log('缓存刷新成功，请等待生效')
+    }
+});
+}
+
 
 //生成上传 Token
 // token = getUpToken(key);

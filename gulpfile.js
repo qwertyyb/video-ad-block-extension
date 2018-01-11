@@ -35,8 +35,8 @@ gulp.task('updateVersion', done => {
     var curVersions = obj.version.split('.')
     obj.version = curVersions[0] + '.' + curVersions[1] + '.' + (parseInt(curVersions[2]) + 1)
     // 更新update_url字段，更新版本号
-    var updateUrl = obj.update_url.split('?')[0] + '?v' + obj.version
-    obj.update_url = updateUrl
+    // var updateUrl = obj.update_url.split('?')[0] + '?v' + obj.version
+    // obj.update_url = updateUrl
 
     // 获取相关信息：
     info = {
