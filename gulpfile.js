@@ -9,18 +9,16 @@ console.log(uploadFile)
 var info = {}
 
 // 压缩 src/scripts/ 目录下的js文件
-gulp.task('minifyJs', done => {
+gulp.task('minifyJs', _ => {
     return gulp.src('src/scripts/**/*.js')
     .pipe(uglify())
     .pipe(gulp.dest('dist/scripts/'))
-    done()
 })
 
 // 把除src/中除src/scripts/全部copy到dist/目录
-gulp.task('copy', done => {
-    gulp.src(['src/*.html', 'src/*.json', 'src/**/*.png'])
+gulp.task('copy', _ => {
+    return gulp.src(['src/*.html', 'src/*.json', 'src/**/*.png'])
     .pipe(gulp.dest('dist/'))
-    done()
 })
 // 清除dist/的文件
 gulp.task('clean', done => {
@@ -33,8 +31,8 @@ gulp.task('updateVersion', done => {
     var file = 'src/manifest.json'
     var obj = jsonfile.readFileSync(file)
     // 更新manifest.json中的相关字段信息
-    var curVersion = Number(obj.version)
-    obj.version = (curVersion + 0.1).toFixed(2).toString()
+    var curVersions = obj.version.split('.')
+    obj.version = curVersions[0] + '.' + curVersions[1] + '.' + (parseInt(curVersions[2]) + 1)
     // 更新update_url字段，更新版本号
     var updateUrl = obj.update_url.split('?')[0] + '?v' + obj.version
     obj.update_url = updateUrl
@@ -53,22 +51,20 @@ gulp.task('updateVersion', done => {
 gulp.task('package', done => {
     var codebase = 'http://7xv7aw.com1.z0.glb.clouddn.com/adblock/videoAdBlock.crx?v' + info.version
     info.crx = codebase
-    gulp.src('./dist/')
+    return gulp.src('./dist/')
     .pipe(crx({
         privateKey: fs.readFileSync('./videoAdBlock.pem', 'utf8'),
         filename: 'videoAdBlock.crx',
         codebase: codebase,
         updateXmlFilename: 'version.xml'
     }))
-    .pipe(gulp.dest('.'))
-    done()
-    
+    .pipe(gulp.dest('./upload'))
 })
 // 上传version.xml和videoAdBlock.crx到七牛云
 gulp.task('upload', done => {
     // 上传version.xml
-    uploadFile('./version.xml', 'adblock/version.xml')
-    uploadFile('./videoAdBlock.crx', 'adblock/videoAdBlock.crx')
+    uploadFile('./upload/version.xml', 'adblock/version.xml')
+    uploadFile('./upload/videoAdBlock.crx', 'adblock/videoAdBlock.crx')
     done()
 })
 gulp.task('build', gulp.series(
