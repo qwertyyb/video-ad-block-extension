@@ -22,6 +22,7 @@ gulp.task('copy', _ => {
 })
 // 清除dist/的文件
 gulp.task('clean', done => {
+    del.sync('upload/*')
     del.sync('dist/*')
     done()
 })
@@ -49,12 +50,16 @@ gulp.task('updateVersion', done => {
 })
 
 gulp.task('package', done => {
-    var codebase = 'http://7xv7aw.com1.z0.glb.clouddn.com/adblock/videoAdBlock.crx?v' + info.version
+    var crxName = 'videoAdBlock-' + info.version + '.crx'
+    var codebase = 'http://7xv7aw.com1.z0.glb.clouddn.com/adblock/' + crxName
+    
+    info.crxName = crxName
     info.crx = codebase
+
     return gulp.src('./dist/')
     .pipe(crx({
         privateKey: fs.readFileSync('./videoAdBlock.pem', 'utf8'),
-        filename: 'videoAdBlock.crx',
+        filename: crxName,
         codebase: codebase,
         updateXmlFilename: 'version.xml'
     }))
@@ -64,7 +69,7 @@ gulp.task('package', done => {
 gulp.task('upload', done => {
     // 上传version.xml
     uploadFile('./upload/version.xml', 'adblock/version.xml')
-    uploadFile('./upload/videoAdBlock.crx', 'adblock/videoAdBlock.crx')
+    uploadFile('./upload/' + info.crxName, 'adblock/' + info.crxName)
     done()
 })
 gulp.task('build', gulp.series(
