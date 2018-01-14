@@ -5,7 +5,8 @@
   "scripts": {
     "build": "gulp build",
     "upload": "gulp upload",
-    "package": "gulp package"
+    "package": "gulp package",
+    "minifyJs": "gulp minifyJs"
   },
   "repository": "https://gitee.com/qwertyyb/videoAdBlock.git",
   "author": "qwertyyb <qwertyyb@foxmail.com>",

@@ -5,13 +5,18 @@ var jsonfile = require('jsonfile')
 var fs = require('fs')
 var crx = require('gulp-crx-pack')
 var uploadFile = require('./build/publish')
-console.log(uploadFile)
+
 var info = {}
 
 // 压缩 src/scripts/ 目录下的js文件
 gulp.task('minifyJs', _ => {
+    var options = {
+        mangle: {
+            toplevel: true
+        }
+    }
     return gulp.src('src/scripts/**/*.js')
-    .pipe(uglify())
+    .pipe(uglify(options))
     .pipe(gulp.dest('dist/scripts/'))
 })
 
